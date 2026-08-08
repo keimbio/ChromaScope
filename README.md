@@ -1,4 +1,4 @@
-# Chromascope
+# ChromaScope
 
 **Color Palette Viewer, Editor & Converter** — a fully client-side, single-file HTML tool for working with color palettes from Procreate, Adobe, GIMP, and other sources.
 
