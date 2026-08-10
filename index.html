@@ -24,7 +24,7 @@
   --green: #4fbd7c;
   --red: #d95454;
   --amber: #dba040;
-  --fs: 14px;
+  --fs: 15px;
 }
 
 /* --- Dark (Black) DEFAULT --- */
@@ -93,6 +93,12 @@
   color-scheme: light;
 }
 
+/* --- Theme body gradients (subtle, built-in) --- */
+[data-theme="dark-black"] body { background: linear-gradient(165deg, #0c0d10 0%, #0f1118 40%, #111520 100%); }
+[data-theme="dark-grey"] body { background: linear-gradient(165deg, #1a1b20 0%, #1e1f28 40%, #202230 100%); }
+[data-theme="dark-light-grey"] body { background: linear-gradient(165deg, #28292f 0%, #2c2d36 40%, #30313c 100%); }
+[data-theme="light"] body { background: linear-gradient(165deg, #f6f6f8 0%, #f0f0f4 40%, #eaeaef 100%); }
+
 /* === RESET === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: var(--fs); scroll-behavior: smooth; }
@@ -109,36 +115,38 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 4px; }
 
-/* === BG IMAGE === */
-.bg-layer {
-  position: fixed; inset: 0; z-index: -1;
-  background-size: cover; background-position: center;
-  pointer-events: none;
+/* === SIZE BUTTONS (Settings) === */
+.size-btns {
+  display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--r);
+  overflow: hidden;
 }
-.bg-layer::after {
-  content: ''; position: absolute; inset: 0;
-  background: var(--bg);
-  opacity: var(--bg-dim, 0.92);
-  pointer-events: none;
+.size-btn {
+  padding: 6px 14px; font: inherit; font-size: 0.82rem; font-weight: 600;
+  border: none; background: transparent; color: var(--text-dim);
+  cursor: pointer; transition: all var(--transition);
+  border-right: 1px solid var(--border);
 }
+.size-btn:last-child { border-right: none; }
+.size-btn:hover { color: var(--text); background: var(--bg4); }
+.size-btn.active { background: var(--teal); color: #fff; }
 
 /* === HEADER (Spectator-style) === */
 .app-header {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 24px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 28px;
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 100;
 }
 .app-logo {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
 }
 .app-logo-icon {
-  width: 34px; height: 34px;
+  width: 42px; height: 42px;
   border-radius: var(--r);
 }
 .app-logo-text {
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 300;
   letter-spacing: 0.01em;
   color: var(--teal);
@@ -536,28 +544,119 @@ body {
 
 /* === FOOTER (Spectator-style) === */
 .app-footer {
-  text-align: center; padding: 30px 20px 18px;
-  border-top: 1px solid var(--border); margin-top: 40px;
+  text-align: center; padding: 40px 24px 28px;
+  border-top: 1px solid var(--border); margin-top: 50px;
 }
 .footer-badges {
   display: flex; align-items: center; justify-content: center;
-  gap: 8px; margin-bottom: 10px;
+  gap: 12px; margin-bottom: 14px;
 }
 .f-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 14px; border: 1px solid var(--border);
-  border-radius: var(--r2); font-size: 0.80rem;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border: 1px solid var(--border);
+  border-radius: var(--r2); font-size: 0.95rem;
   color: var(--text-dim); text-decoration: none;
   transition: border-color var(--transition);
+  font-weight: 500;
 }
 .f-badge:hover { border-color: var(--teal); color: var(--teal); }
 .footer-privacy {
-  font-size: 0.76rem; color: var(--text-faint); margin: 8px 0;
+  font-size: 0.88rem; color: var(--text-faint); margin: 12px 0;
+  line-height: 1.5;
 }
-.footer-credit { color: var(--teal); font-size: 0.85rem; margin-top: 8px; }
+.footer-credit { color: var(--teal); font-size: 1.05rem; font-weight: 500; margin-top: 12px; }
 .footer-logo {
-  width: 56px; height: 56px; border-radius: 50%; margin-top: 8px;
+  width: 80px; height: 80px; border-radius: 50%; margin-top: 10px;
 }
+
+/* === VIEW TOGGLE (header) === */
+.view-toggle-btn {
+  padding: 6px 12px; border: 1px solid var(--border);
+  border-radius: var(--r); background: var(--bg3); color: var(--text-dim);
+  font: inherit; font-size: 0.82rem; cursor: pointer;
+  transition: all var(--transition); display: inline-flex; align-items: center; gap: 5px;
+}
+.view-toggle-btn:hover { background: var(--bg4); color: var(--text); }
+.view-toggle-btn.active { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
+
+/* === STRIP / LIST VIEW (PaletteStudio-style) === */
+.strip-view { display: none; flex-direction: column; gap: 14px; padding: 16px 0; }
+.strip-view.show { display: flex; }
+.strip-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 16px 18px; overflow: hidden;
+}
+.strip-card-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+}
+.strip-card-name { font-weight: 600; font-size: 1rem; flex: 1; }
+.strip-card-count {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-dim); background: var(--bg4); padding: 3px 10px;
+  border-radius: 10px; font-weight: 600;
+}
+.strip-bar {
+  display: flex; height: 48px; border-radius: var(--r); overflow: hidden;
+  border: 1px solid var(--border); margin-bottom: 10px;
+}
+.strip-bar-seg { flex: 1; cursor: pointer; position: relative; transition: opacity var(--transition); min-width: 4px; }
+.strip-bar-seg:hover { opacity: 0.85; }
+.strip-bar-seg .tip {
+  display: none; position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%); background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 3px 8px; font-size: 0.70rem;
+  font-family: var(--font-mono); white-space: nowrap; z-index: 10;
+  pointer-events: none; margin-bottom: 4px;
+}
+.strip-bar-seg:hover .tip { display: block; }
+.strip-overflow {
+  font-size: 0.78rem; color: var(--text-dim); margin-left: 6px; white-space: nowrap;
+}
+.strip-actions {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+/* Harmony expansion below strip */
+.strip-harmony {
+  display: none; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.strip-harmony.show { display: block; }
+.strip-harmony-label {
+  font-size: 0.72rem; color: var(--text-dim); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.strip-harmony-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 6px;
+}
+.strip-harm-item {
+  display: flex; align-items: center; gap: 6px; padding: 4px 8px;
+  background: var(--bg3); border-radius: var(--r); cursor: pointer;
+  transition: background var(--transition);
+}
+.strip-harm-item:hover { background: var(--bg4); }
+.strip-harm-dot { width: 18px; height: 18px; border-radius: 3px; border: 1px solid var(--border); flex-shrink: 0; }
+.strip-harm-hex { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+
+/* === EXPORT MODAL === */
+.export-format-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  margin-bottom: 20px;
+}
+.export-format-card {
+  padding: 14px; border: 2px solid var(--border); border-radius: var(--r2);
+  cursor: pointer; text-align: center; transition: all var(--transition);
+  background: var(--bg3);
+}
+.export-format-card:hover { border-color: var(--border2); background: var(--bg4); }
+.export-format-card.active { border-color: var(--teal); background: var(--teal-dim); }
+.export-format-badge {
+  display: inline-block; padding: 4px 10px; border-radius: var(--r);
+  font-size: 0.72rem; font-weight: 700; color: #fff; margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--teal), #2980b9);
+}
+.export-format-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 2px; }
+.export-format-desc { font-size: 0.72rem; color: var(--text-dim); }
 
 /* === UTILITY === */
 .hidden { display: none !important; }
@@ -576,8 +675,6 @@ body {
 </style>
 </head>
 <body>
-<div class="bg-layer" id="bgLayer"></div>
-
 <!-- ════ HEADER ════ -->
 <header class="app-header">
   <div class="app-logo">
@@ -585,13 +682,10 @@ body {
     <span class="app-logo-text">ChromaScope</span>
   </div>
   <div class="header-right">
-    <span class="toolbar-label">SIZE</span>
-    <div class="size-pills">
-      <input type="radio" name="sz" id="szS" value="12"><label for="szS">S</label>
-      <input type="radio" name="sz" id="szM" value="14" checked><label for="szM">M</label>
-      <input type="radio" name="sz" id="szL" value="16"><label for="szL">L</label>
-      <input type="radio" name="sz" id="szXL" value="19"><label for="szXL">XL</label>
-    </div>
+    <button class="view-toggle-btn" id="btnListView" title="Toggle list/strip view">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      List
+    </button>
     <button class="btn btn-accent" id="btnImport">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Import
@@ -642,12 +736,77 @@ body {
         <button class="btn btn-sm" data-export="gpl">.gpl</button>
         <button class="btn btn-sm" data-export="swatches">.swatches</button>
         <button class="btn btn-sm" data-export="png">PNG</button>
+        <button class="btn btn-sm btn-accent" id="btnExportModal">More…</button>
       </div>
     </div>
 
     <div class="swatch-grid cols-4" id="swatchGrid"></div>
+
+    <!-- Strip / List View (PaletteStudio-style) -->
+    <div class="strip-view" id="stripView"></div>
   </div>
 </main>
+
+<!-- ════ EXPORT MODAL ════ -->
+<div class="modal-overlay" id="exportOverlay">
+  <div class="modal" style="width:600px;">
+    <div class="modal-head">
+      <h2>Export Palette</h2>
+      <button class="btn-icon" id="exportClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="s-group-title">File Formats</div>
+      <div class="export-format-grid" id="exportFormats">
+        <div class="export-format-card active" data-fmt="ase">
+          <div class="export-format-badge">ASE</div>
+          <div class="export-format-name">ASE</div>
+          <div class="export-format-desc">Adobe Swatch Exchange</div>
+        </div>
+        <div class="export-format-card" data-fmt="swatches">
+          <div class="export-format-badge">SWA</div>
+          <div class="export-format-name">Swatches</div>
+          <div class="export-format-desc">Procreate .swatches</div>
+        </div>
+        <div class="export-format-card" data-fmt="gpl">
+          <div class="export-format-badge">GPL</div>
+          <div class="export-format-name">GIMP</div>
+          <div class="export-format-desc">GIMP palette</div>
+        </div>
+        <div class="export-format-card" data-fmt="all">
+          <div class="export-format-badge">ALL</div>
+          <div class="export-format-name">All formats</div>
+          <div class="export-format-desc">ASE + Swatches + GPL</div>
+        </div>
+      </div>
+      <div class="s-group-title">Quick Exports</div>
+      <div class="export-format-grid">
+        <div class="export-format-card" data-fmt="png">
+          <div class="export-format-badge" style="background:linear-gradient(135deg,#e67e22,#d35400)">IMG</div>
+          <div class="export-format-name">PNG</div>
+          <div class="export-format-desc">Image preview</div>
+        </div>
+        <div class="export-format-card" data-fmt="css">
+          <div class="export-format-badge" style="background:linear-gradient(135deg,#9b59b6,#8e44ad)">CSS</div>
+          <div class="export-format-name">CSS</div>
+          <div class="export-format-desc">Custom properties</div>
+        </div>
+        <div class="export-format-card" data-fmt="json">
+          <div class="export-format-badge" style="background:linear-gradient(135deg,#2ecc71,#27ae60)">JSON</div>
+          <div class="export-format-name">JSON</div>
+          <div class="export-format-desc">Color data</div>
+        </div>
+      </div>
+      <div style="text-align:right;padding-top:10px;">
+        <button class="btn btn-accent" id="exportDownload">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ════ DETAIL PANEL ════ -->
 <div class="detail-panel" id="detailPanel">
@@ -709,25 +868,15 @@ body {
         </div>
       </div>
       <div class="s-group">
-        <div class="s-group-title">Background</div>
-        <div class="bg-grid" id="bgGrid">
-          <div class="bg-opt none-bg active" data-bg="none">None</div>
-          <div class="bg-opt" data-bg="gradient1" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)">Gradient 1</div>
-          <div class="bg-opt" data-bg="gradient2" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)">Gradient 2</div>
-          <div class="bg-opt" data-bg="gradient3" style="background:linear-gradient(135deg,#232526,#414345)">Gradient 3</div>
-          <div class="bg-opt" data-bg="gradient4" style="background:linear-gradient(135deg,#2d3436,#636e72)">Gradient 4</div>
-          <div class="bg-opt" data-bg="custom" id="bgCustomOpt">Custom…</div>
-        </div>
-        <div class="s-row" style="margin-top:10px;">
-          <span class="lbl">Background Dimming</span>
-          <input type="range" id="sBgDim" min="0" max="100" value="92" step="1">
-        </div>
-      </div>
-      <div class="s-group">
         <div class="s-group-title">Typography</div>
         <div class="s-row">
           <span class="lbl">Font Size</span>
-          <input type="range" id="sFontSize" min="11" max="20" value="14" step="1">
+          <div class="size-btns" id="sizeBtns">
+            <button class="size-btn" data-size="13">S</button>
+            <button class="size-btn active" data-size="15">M</button>
+            <button class="size-btn" data-size="17">L</button>
+            <button class="size-btn" data-size="20">XL</button>
+          </div>
         </div>
       </div>
       <div class="s-group">
@@ -750,7 +899,6 @@ body {
 </div>
 
 <input type="file" id="fileInput" multiple accept=".swatches,.ase,.aco,.gpl" style="display:none">
-<input type="file" id="bgFileInput" accept="image/*" style="display:none">
 <div class="toast" id="toast"></div>
 
 <!-- ════ FOOTER ════ -->
@@ -1125,7 +1273,9 @@ const state = {
   activeView: 'palette',
   selectedColors: new Set(),
   cols: 4,
-  settings: { theme:'dark-black', nameFormat:'meodai', fontSize:14, bgImage:'none', bgDim:92, bgCustom:null },
+  listView: false,
+  exportFormat: 'ase',
+  settings: { theme:'dark-black', nameFormat:'meodai', fontSize:15 },
 };
 
 function openDB() {
@@ -1167,33 +1317,11 @@ function applySettings() {
   const s = state.settings;
   document.documentElement.setAttribute('data-theme', s.theme);
   document.documentElement.style.setProperty('--fs', s.fontSize + 'px');
-  /* Size pills sync */
-  const szMap = {12:'szS',14:'szM',16:'szL',19:'szXL'};
-  const szId = szMap[s.fontSize];
-  if (szId) { const el=$('#'+szId); if(el) el.checked = true; }
-  /* Background */
-  const bgLayer = $('#bgLayer');
-  if (s.bgImage === 'none') {
-    bgLayer.style.backgroundImage = 'none';
-  } else if (s.bgImage === 'custom' && s.bgCustom) {
-    bgLayer.style.backgroundImage = `url(${s.bgCustom})`;
-  } else if (s.bgImage.startsWith('gradient')) {
-    const grads = {
-      gradient1:'linear-gradient(135deg,#0f2027,#203a43,#2c5364)',
-      gradient2:'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',
-      gradient3:'linear-gradient(135deg,#232526,#414345)',
-      gradient4:'linear-gradient(135deg,#2d3436,#636e72)',
-    };
-    bgLayer.style.backgroundImage = grads[s.bgImage] || 'none';
-  }
-  bgLayer.style.setProperty('--bg-dim', (s.bgDim / 100).toFixed(2));
   /* Sync controls */
   $('#sTheme').value = s.theme;
-  $('#sFontSize').value = s.fontSize;
-  $('#sBgDim').value = s.bgDim;
   $('#sNameFormat').value = s.nameFormat;
-  /* BG grid active */
-  $$('.bg-opt').forEach(o => o.classList.toggle('active', o.dataset.bg === s.bgImage));
+  /* Size buttons */
+  $$('#sizeBtns .size-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.size) === s.fontSize));
 }
 
 /* ══════════════════════════════════════
@@ -1289,9 +1417,158 @@ function render() {
     if (!state.activePaletteId || !state.palettes.find(p=>p.id===state.activePaletteId))
       state.activePaletteId = state.palettes[0].id;
     renderTabs();
-    renderSwatches();
+    /* Show grid or strip view */
+    const grid = $('#swatchGrid');
+    const toolbar = $('#toolbar');
+    if (state.listView) {
+      grid.style.display = 'none';
+      toolbar.style.display = 'none';
+      renderStripView();
+    } else {
+      grid.style.display = '';
+      toolbar.style.display = '';
+      $('#stripView').classList.remove('show');
+      renderSwatches();
+    }
     updateSelBar();
   }
+}
+
+/* ══════════════════════════════════════
+   STRIP / LIST VIEW
+   ══════════════════════════════════════ */
+function renderStripView() {
+  const sv = $('#stripView');
+  sv.innerHTML = '';
+  if (!state.listView) { sv.classList.remove('show'); return; }
+  sv.classList.add('show');
+
+  state.palettes.forEach(pal => {
+    const card = document.createElement('div');
+    card.className = 'strip-card';
+    const maxShow = 10;
+    const overflow = pal.colors.length > maxShow ? pal.colors.length - maxShow : 0;
+
+    card.innerHTML = `
+      <div class="strip-card-head">
+        <span class="strip-card-name">${pal.name}</span>
+        <span class="strip-card-count">${pal.colors.length} COLORS</span>
+      </div>
+      <div class="strip-bar">${pal.colors.slice(0, maxShow).map((c,i) => {
+        const hex = CM.rgbToHex(c.r,c.g,c.b);
+        return `<div class="strip-bar-seg" style="background:${hex}" data-idx="${i}" data-pal="${pal.id}"><div class="tip">${nameColor(c.r,c.g,c.b)} ${hex.toUpperCase()}</div></div>`;
+      }).join('')}${overflow ? `<span class="strip-overflow">+${overflow}</span>` : ''}</div>
+      <div class="strip-actions">
+        <button class="btn btn-sm" data-strip-action="view" data-pal="${pal.id}">👁 View</button>
+        <button class="btn btn-sm" data-strip-action="export" data-pal="${pal.id}">↑ Export</button>
+        <button class="btn btn-sm" data-strip-action="comp" data-pal="${pal.id}">Complementary</button>
+        <button class="btn btn-sm" data-strip-action="analogous" data-pal="${pal.id}">Analogous</button>
+        <button class="btn btn-sm" data-strip-action="triadic" data-pal="${pal.id}">Triadic</button>
+        <button class="btn btn-sm" data-strip-action="remove" data-pal="${pal.id}">🗑 Remove</button>
+      </div>
+      <div class="strip-harmony" id="harmony-${pal.id}"></div>
+    `;
+
+    /* Strip segment clicks */
+    card.querySelectorAll('.strip-bar-seg').forEach(seg => {
+      seg.addEventListener('click', () => {
+        const p = state.palettes.find(pp=>pp.id===seg.dataset.pal);
+        if (p) openDetail(p, parseInt(seg.dataset.idx));
+      });
+    });
+
+    /* Action buttons */
+    card.querySelectorAll('[data-strip-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.stripAction;
+        const p = state.palettes.find(pp=>pp.id===btn.dataset.pal);
+        if (!p) return;
+        if (action === 'view') {
+          state.activePaletteId = p.id;
+          state.listView = false;
+          $('#btnListView').classList.remove('active');
+          render();
+        } else if (action === 'export') {
+          state.activePaletteId = p.id;
+          openExportModal();
+        } else if (action === 'remove') {
+          removePalette(p.id);
+        } else {
+          /* Harmony toggle */
+          const hDiv = document.getElementById('harmony-'+p.id);
+          if (hDiv.classList.contains('show') && hDiv.dataset.type === action) {
+            hDiv.classList.remove('show');
+            return;
+          }
+          hDiv.dataset.type = action;
+          const harmMap = {comp:'complementary',analogous:'analogous',triadic:'triadic'};
+          const key = harmMap[action] || action;
+          let html = `<div class="strip-harmony-label">${key}</div><div class="strip-harmony-grid">`;
+          p.colors.forEach(c => {
+            const hex = CM.rgbToHex(c.r,c.g,c.b);
+            const harms = CM.harmonies(c.r,c.g,c.b);
+            const related = harms[key] || [];
+            html += `<div class="strip-harm-item" title="Copy"><div class="strip-harm-dot" style="background:${hex}"></div><span class="strip-harm-hex">${hex.toUpperCase()}</span></div>`;
+            related.forEach(h => {
+              html += `<div class="strip-harm-item" data-hex="${h.toUpperCase()}" title="Copy ${h.toUpperCase()}"><div class="strip-harm-dot" style="background:${h}"></div><span class="strip-harm-hex">${h.toUpperCase()}</span></div>`;
+            });
+          });
+          html += '</div>';
+          hDiv.innerHTML = html;
+          hDiv.classList.add('show');
+          hDiv.querySelectorAll('.strip-harm-item[data-hex]').forEach(item => {
+            item.addEventListener('click', ()=>navigator.clipboard.writeText(item.dataset.hex).then(()=>toast('Copied '+item.dataset.hex)));
+          });
+        }
+      });
+    });
+
+    sv.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════
+   EXPORT MODAL
+   ══════════════════════════════════════ */
+function openExportModal() {
+  $('#exportOverlay').classList.add('open');
+}
+
+async function doExportFromModal() {
+  const fmt = state.exportFormat;
+  const pal = activePal();
+  if (!pal) { toast('No palette selected'); return; }
+  const named = {
+    name: pal.name,
+    colors: pal.colors.map(c=>({...c,name:nameColor(c.r,c.g,c.b)}))
+  };
+
+  if (fmt === 'all') {
+    /* Download all formats as individual files */
+    Exp.download(Exp.toAse(named), named.name+'.ase','application/octet-stream');
+    Exp.download(Exp.toGpl(named), named.name+'.gpl','text/plain');
+    const sw = await Exp.toSwatches(named);
+    Exp.download(sw, named.name+'.swatches','application/octet-stream');
+    toast('Exported all formats for '+named.name);
+  } else if (fmt === 'css') {
+    const css = ':root {\n' + named.colors.map((c,i) => {
+      const hex = CM.rgbToHex(c.r,c.g,c.b);
+      const nm = (c.name||'color-'+i).toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      return `  --${nm}: ${hex};`;
+    }).join('\n') + '\n}\n';
+    Exp.download(css, named.name+'.css','text/css');
+    toast('Exported CSS variables');
+  } else if (fmt === 'json') {
+    const json = JSON.stringify(named.colors.map(c => ({
+      name: c.name, hex: CM.rgbToHex(c.r,c.g,c.b),
+      rgb: [c.r,c.g,c.b], hsl: CM.rgbToHsl(c.r,c.g,c.b).map(Math.round),
+    })), null, 2);
+    Exp.download(json, named.name+'.json','application/json');
+    toast('Exported JSON');
+  } else {
+    await doExport(fmt, false);
+  }
+  $('#exportOverlay').classList.remove('open');
 }
 
 /* ══════════════════════════════════════
@@ -1521,13 +1798,29 @@ function setupEvents() {
     state.cols = parseInt(r.value); renderSwatches();
   }));
 
-  /* Size pills */
-  $$('input[name="sz"]').forEach(r => r.addEventListener('change', ()=>{
-    state.settings.fontSize = parseInt(r.value); applySettings(); saveSettings();
-  }));
+  /* List view toggle */
+  $('#btnListView').addEventListener('click', ()=>{
+    state.listView = !state.listView;
+    $('#btnListView').classList.toggle('active', state.listView);
+    render();
+  });
 
-  /* Export strip */
+  /* Export strip (quick buttons) */
   $$('[data-export]').forEach(b => b.addEventListener('click', ()=>doExport(b.dataset.export, false)));
+
+  /* Export modal */
+  const btnExportModal = $('#btnExportModal');
+  if (btnExportModal) btnExportModal.addEventListener('click', openExportModal);
+  $('#exportClose').addEventListener('click', ()=>$('#exportOverlay').classList.remove('open'));
+  $('#exportOverlay').addEventListener('click', e=>{
+    if(e.target===$('#exportOverlay'))$('#exportOverlay').classList.remove('open');
+  });
+  $$('.export-format-card').forEach(c => c.addEventListener('click', ()=>{
+    $$('.export-format-card').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    state.exportFormat = c.dataset.fmt;
+  }));
+  $('#exportDownload').addEventListener('click', doExportFromModal);
 
   /* Selection bar */
   $('#selClear').addEventListener('click', ()=>{state.selectedColors.clear();renderSwatches();updateSelBar();});
@@ -1540,35 +1833,18 @@ function setupEvents() {
     if(e.target===$('#settingsOverlay'))$('#settingsOverlay').classList.remove('open');
   });
   $('#sTheme').addEventListener('change', e=>{state.settings.theme=e.target.value;applySettings();saveSettings();});
-  $('#sFontSize').addEventListener('input', e=>{
-    state.settings.fontSize=parseInt(e.target.value);applySettings();saveSettings();
-    /* Sync size pills */
-    const szMap={12:'szS',14:'szM',16:'szL',19:'szXL'};
-    const id=szMap[state.settings.fontSize];
-    $$('input[name="sz"]').forEach(r=>r.checked=false);
-    if(id)$('#'+id).checked=true;
-  });
+
+  /* Size buttons in settings */
+  $$('#sizeBtns .size-btn').forEach(b => b.addEventListener('click', ()=>{
+    state.settings.fontSize = parseInt(b.dataset.size);
+    applySettings(); saveSettings();
+  }));
+
   $('#sNameFormat').addEventListener('change', e=>{
     state.settings.nameFormat=e.target.value; saveSettings();
     renderSwatches(); /* LIVE RENAME */
+    if (state.listView) renderStripView();
     if($('#detailPanel').classList.contains('open'))renderDetailContent();
-  });
-  $('#sBgDim').addEventListener('input', e=>{
-    state.settings.bgDim=parseInt(e.target.value);applySettings();saveSettings();
-  });
-
-  /* BG image grid */
-  $$('.bg-opt').forEach(o => o.addEventListener('click', ()=>{
-    if(o.dataset.bg==='custom'){
-      $('#bgFileInput').click(); return;
-    }
-    state.settings.bgImage=o.dataset.bg;applySettings();saveSettings();
-  }));
-  $('#bgFileInput').addEventListener('change', e=>{
-    const file=e.target.files[0]; if(!file)return;
-    const reader=new FileReader();
-    reader.onload=ev=>{state.settings.bgCustom=ev.target.result;state.settings.bgImage='custom';applySettings();saveSettings();};
-    reader.readAsDataURL(file); e.target.value='';
   });
 
   /* Detail */
